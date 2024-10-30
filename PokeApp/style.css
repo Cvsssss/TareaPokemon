@@ -1,0 +1,71 @@
+body{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column ;
+
+
+}
+#UI{
+    height: 10%;
+    width: 200%;
+}
+.arena {
+    display: flex;
+    height: 50%;
+    background-image: url('./fondo.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px; 
+}
+
+#pokePropio{
+  
+    position: fixed;
+    top: 200px;
+    left: 430px;
+}
+#pokeRival{
+  
+    position: fixed;
+    top: 423px;
+    left: 331px;
+}
+#poke-rival{
+    height: 10%;
+    width: 100%;
+}
+#poke-propio{
+    height: 20%;
+    width: 100%;
+}
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.card {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    max-width: 800px;
+}
+
+#stats {
+    width: 50%;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+img {
+    max-width: 50%; 
+    height: 17%;
+}
