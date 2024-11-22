@@ -38,7 +38,11 @@ const getNumRandom = () => {
 }
 
 const obtenerPokePropio = () => {
-    const num = input.value;
+    const num = parseInt(input.value);
+    if(isNaN(num)||num<1||num>1000){
+        alert("Ingresa un valor valido");
+        return;
+    }
 
     axios.get(`https://pokeapi.co/api/v2/pokemon/${num}`)
         .then((res) => {
