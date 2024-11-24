@@ -1,4 +1,5 @@
 
+
 //Atributos poke rival
 const imgRival = document.querySelector("#pokeRival");
 const nombreRival = document.querySelector("#nombreRival");
