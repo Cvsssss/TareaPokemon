@@ -27,8 +27,8 @@ const velocidadPropio = document.querySelector("#velocidadPropio");
 //Interfaz de usuario
 const input = document.querySelector('#input');
 const btnElegir = document.querySelector('#btn-poke');
-const btnAtkFis  = document.querySelector('#btn-atk-fis');
-const btnAtkEsp  = document.querySelector('#btn-atk-esp');
+const btnPelear  = document.querySelector('#combate');
+
 
 //Método de número random
 const getNumRandom = () => {
@@ -144,6 +144,36 @@ const efectividad = (multiplicador) => {
     }
 }
 
+const combate = () => {
+    const nombreRivalTexto = nombreRival.textContent;
+    const nombrePropioTexto = nombrePropio.textContent;
+    const ataqueRival = parseInt(atkFisRival.textContent) || 0;
+    const ataquePropio = parseInt(atkFisPropio.textContent) || 0;
+    const tipoRival = tipo1Rival.textContent;
+    const tipoPropio = tipo1Propio.textContent;
+    const tipoRivalSecundario = tipo2Rival.textContent;
+    const tipoPropioSecundario = tipo2Propio.textContent;
+
+    const multiplicadorAtaquePropio = calcularMultiplicadorAtaque(tipoPropio, tipoRival, tipoRivalSecundario);
+    const ataquePropioTotal = ataquePropio * multiplicadorAtaquePropio;
+    const efectividadAtaquePropio = efectividad(multiplicadorAtaquePropio);
+
+    const multiplicadorAtaqueRival = calcularMultiplicadorAtaque(tipoRival, tipoPropio, tipoPropioSecundario);
+    const ataqueRivalTotal = ataqueRival * multiplicadorAtaqueRival;
+    const efectividadAtaqueRival = efectividad(multiplicadorAtaqueRival);
+
+    const mensajesCombate = document.getElementById('mensajes-combate');
+    mensajesCombate.innerHTML = ''; // Limpia mensajes anteriores
+
+    const mensajeAtaquePropio = document.createElement('p');
+    mensajeAtaquePropio.textContent = `¡${nombrePropioTexto} ataca!  ${efectividadAtaquePropio} e hizo ${ataquePropioTotal.toFixed(2)} puntos de daño al rival.`;
+    mensajesCombate.appendChild(mensajeAtaquePropio);
+
+    const mensajeAtaqueRival = document.createElement('p');
+    mensajeAtaqueRival.textContent = `¡${nombreRivalTexto} contraataca!  ${efectividadAtaqueRival} e hizo ${ataqueRivalTotal.toFixed(2)} puntos de daño.`;
+    mensajesCombate.appendChild(mensajeAtaqueRival);
+};
+
 
 // Cargar Pokémon rival al cargar la página
 window.addEventListener('load', obtenerPokeRival);
@@ -151,7 +181,8 @@ window.addEventListener('load', obtenerPokeRival);
 // Asociar el botón para elegir el Pokémon propio
 btnElegir.addEventListener('click', obtenerPokePropio);
 
-btnPelear.addEventListener();
+//Asociar boton pelear 
+btnPelear.addEventListener('click', combate);
 
 
 

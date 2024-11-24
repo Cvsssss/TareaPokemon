@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,10 +9,12 @@
 </head>
 <body>
     
-    
-    <div class="container">
-    <div class="card">
-        <div class="stats" id="poke-rival">
+    <header>
+        <h1>Combate Pokémon POKEAPP</h1>
+    </header>
+
+    <main>
+        <section class="stats" id="poke-rival">
             <h3 id="nombreRival"></h3>
             <p id="tipo1Rival"></p>
             <p id="tipo2Rival"></p>
@@ -23,9 +24,14 @@
             <p>Defensa Especial: <span id="defensaEspRival"></span></p>
             <p>Defensa Fisica: <span id="defensaFisRival"></span></p>
             <p>Velocidad: <span id="velocidadRival"></span></p>
-        </div>
+        </section>
 
-        <div class="stats" id="poke-propio">
+        <section class="arena">
+            <img id="pokeRival" src="" alt="">
+            <img id="pokePropio" src="" alt="">
+        </section>
+
+        <section class="stats" id="poke-propio">
             <h3 id="nombrePropio"></h3>
             <p id="tipo1Propio"></p>
             <p id="tipo2Propio"></p>
@@ -35,22 +41,29 @@
             <p>Defensa Especial: <span id="defensaEspPropio"></span></p>
             <p>Defensa Fisica: <span id="defensaFisPropio"></span></p>
             <p>Velocidad: <span id="velocidadPropio"></span></p>
-        </div>
-    </div>
-</div>
+        </section>
 
+        <section class="controls" id="controls">
+            <input id="input" max="500" type="number">
+            <button id="btn-poke">Elegir Pokémon</button>
+            <button id="combate">Ataque</button>
+        </section>
+
+        <section id="mensajes-combate"></section>
         
-    <div class="arena">
-        <img id="pokeRival" src="" alt="">
-        <img id="pokePropio" src="" alt="">
-    </div>
+    </main>
 
-    <div id="UI">
-        <input id="input" max="500" type="number">
-        <button id="btn-poke">Elegir poke</button>
-        <button id="btn-atk-fis">Ataque Fisico</button>
-        <button id="btn-atk-esp">Ataque Especial</button>
-    </div>
+
+
+
+    <footer>
+        <div class="footer-content">
+            <ol>
+                <li>Cuevas Quintana Amir</li>
+                <li>Sandoval Hernandez Darinka</li>
+            </ol>
+        </div>
+    </footer>  
     <script src="./app.js"></script>
 </body>
 
