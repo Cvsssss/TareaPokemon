@@ -54,8 +54,21 @@ const obtenerPokePropio = () => {
         .then((data) => {
             imgPropio.src = data.sprites.back_default;
             nombrePropio.textContent = data.name;
+
+            // Tipo 1
             tipo1Propio.textContent = data.types[0].type.name;
-            tipo2Propio.textContent = data.types[1]?.type.name || "";
+            tipo1Propio.className = `type ${data.types[0].type.name.toLowerCase()}`;
+
+            // Tipo 2
+            if (data.types[1]) {
+                tipo2Propio.textContent = data.types[1].type.name;
+                tipo2Propio.className = `type ${data.types[1].type.name.toLowerCase()}`;
+            } else {
+                tipo2Propio.textContent = "";
+                tipo2Propio.className = "type"; // Restablece la clase por defecto
+            }
+
+            // Estadísticas
             vidaPropio.textContent = data.stats[0].base_stat;
             vidaPropio.setAttribute("data-total", data.stats[0].base_stat); // Establece la vida total
             atkFisPropio.textContent = data.stats[1].base_stat;
@@ -71,6 +84,7 @@ const obtenerPokePropio = () => {
         })
         .catch((error) => agregarMensaje("Error al obtener el Pokémon: " + error));
 };
+
 
 // Obtener información del Pokémon rival
 const obtenerPokeRival = () => {
