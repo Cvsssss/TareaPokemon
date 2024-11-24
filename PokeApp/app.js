@@ -1,4 +1,4 @@
-//Atributos poke rival
+
 const imgRival = document.querySelector("#pokeRival");
 const nombreRival = document.querySelector("#nombreRival");
 const tipo1Rival = document.querySelector("#tipo1Rival");
@@ -244,3 +244,71 @@ btnPelear.addEventListener('click', combate);
 
 
 
+// Función para actualizar la UI dinámicamente
+const actualizarUI = (pokemonData, rival = false) => {
+  const prefix = rival ? "Rival" : "Propio";
+
+  // Asignar nombre, nivel y sexo
+  document.getElementById(`nombre${prefix}`).textContent =
+    pokemonData.name.toUpperCase();
+  document.getElementById(`nivel${prefix}`).textContent = `Lv${pokemonData.level}`;
+  document.getElementById(`sexo${prefix}`).textContent =
+    pokemonData.sex || "♂";
+
+  // Tipos y colores
+  const tipo1Element = document.getElementById(`tipo1${prefix}`);
+  const tipo2Element = document.getElementById(`tipo2${prefix}`);
+
+  // Asignar tipos al elemento HTML con sus clases correspondientes
+  tipo1Element.textContent = pokemonData.types[0];
+  tipo1Element.className = `type ${pokemonData.types[0].toLowerCase()}`;
+
+  if (pokemonData.types[1]) {
+    tipo2Element.textContent = pokemonData.types[1];
+    tipo2Element.className = `type ${pokemonData.types[1].toLowerCase()}`;
+  } else {
+    tipo2Element.textContent = "";
+    tipo2Element.className = "type";
+  }
+
+
+  const vidaPorcentaje =
+    (pokemonData.currentHP / pokemonData.totalHP) * 100;
+  const hpBar = document.getElementById(`hp${prefix}-bar`);
+  hpBar.style.width = `${vidaPorcentaje}%`;
+
+  // Cambiar color de barra de vida
+  if (vidaPorcentaje > 50) {
+    hpBar.style.backgroundColor = "green";
+  } else if (vidaPorcentaje > 20) {
+    hpBar.style.backgroundColor = "yellow";
+  } else {
+    hpBar.style.backgroundColor = "red";
+  }
+};
+
+// Función para obtener un Pokémon aleatorio desde la PokeAPI
+const obtenerPokemonAleatorio = async (rival = false) => {
+  try {
+    const randomId = Math.floor(Math.random() * 1008) + 1; // Genera un ID aleatorio entre 1 y 1008
+    const response = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon/${randomId}`
+    );
+    const data = response.data;
+
+    // Extraer información relevante del Pokémon
+    const pokemonData = {
+      name: data.name,
+      level: Math.floor(Math.random() * 100) + 1, // Nivel aleatorio entre 1 y 100
+      sex: Math.random() > 0.5 ? "♂" : "♀", // Sexo aleatorio
+      currentHP: data.stats[0].base_stat,
+      totalHP: data.stats[0].base_stat,
+      types: data.types.map((type) => type.type.name), // Obtener nombres de los tipos
+    };
+
+    // Actualizar la UI con la información del Pokémon
+    actualizarUI(pokemonData, rival);
+  } catch (error) {
+    console.error("Error al obtener el Pokémon:", error);
+  }
+};
