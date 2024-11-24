@@ -1,11 +1,59 @@
+
+body {
+    font-family: Arial, "Comic Sans MS", cursive;
+    background-color: #535151;
+    color: #333;
+}
+
+footer {
+    text-align: left;
+    padding: 20px;
+    background-color: #c72f2f;
+    color: #000000; 
+}
+
+.footer-content {
+
 body{
     height: 100vh;
     width: 100vw;
+
     display: flex;
-    flex-direction: column ;
-
-
+    justify-content: space-between;
 }
+
+footer ol {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+footer li {
+    margin: 0 10px;
+}
+
+header {
+    background-color: #c72f2f;
+    color: #e7b322;
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, "Comic Sans MS", cursive;
+}
+
+h1 {
+    font-size: 36px;
+}
+
+main {
+    flex-grow: 1;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background-color: rgb(118, 179, 116);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 #UI {
     display: flex;
     justify-content: center; 
@@ -34,15 +82,18 @@ body{
     padding: 30;
     position: relative; 
     top: -250px;
+
 }
 
 
 #pokePropio{
+
   
     position: fixed;
     top: 320px;
-    left: 580px;
+
 }
+
 #pokeRival{
   
     position: fixed;
@@ -62,25 +113,21 @@ body{
     flex-direction: column;
     align-items: center;
     margin-top: 50px;
+
 }
 
-.card {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    max-width: 800px;
+.espacio {
+    margin-right: 5px;
 }
 
-#stats {
-    width: 50%;
+#mensajes-combate {
+    margin-top: 20px;
 }
 
-.image-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
+h3 {
+    font-size: 24px;
 }
+
 img {
     max-width: 50%; 
     height: 17%;
@@ -193,3 +240,4 @@ img {
 
     
 }
+
