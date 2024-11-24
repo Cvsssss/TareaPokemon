@@ -1,3 +1,4 @@
+
 // Atributos del Pokémon rival
 const imgRival = document.querySelector("#pokeRival");
 const nombreRival = document.querySelector("#nombreRival");
@@ -269,7 +270,13 @@ const actualizarBarraVida = (vidaActual, vidaTotal, barra) => {
 };
 
 
+
+
+
 btnElegir.addEventListener("click", obtenerPokePropio);
 btnAtkFis.addEventListener("click", () => combate("físico"));
 btnAtkEsp.addEventListener("click", () => combate("especial"));
+btnPeleaAuto.addEventListener("click", () => combate("auto"));
 window.addEventListener("load", obtenerPokeRival);
+
+
