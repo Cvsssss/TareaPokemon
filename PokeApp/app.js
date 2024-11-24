@@ -1,97 +1,95 @@
 
-
 //Atributos poke rival
+
 const imgRival = document.querySelector("#pokeRival");
 const nombreRival = document.querySelector("#nombreRival");
 const tipo1Rival = document.querySelector("#tipo1Rival");
 const tipo2Rival = document.querySelector("#tipo2Rival");
-const atkFisRival = document.querySelector("#ataqueFisRival"); 
+const atkFisRival = document.querySelector("#ataqueFisRival");
 const atkEspRival = document.querySelector("#ataqueEspRival");
 const vidaRival = document.querySelector("#vidaRival");
 const defensaEspRival = document.querySelector("#defensaEspRival");
 const defensaFisRival = document.querySelector("#defensaFisRival");
 const velocidadRival = document.querySelector("#velocidadRival");
 
-//Atributos poke propio
+// Atributos poke propio
 const imgPropio = document.querySelector("#pokePropio");
 const nombrePropio = document.querySelector("#nombrePropio");
 const tipo1Propio = document.querySelector("#tipo1Propio");
 const tipo2Propio = document.querySelector("#tipo2Propio");
-const atkFisPropio = document.querySelector("#ataqueFisPropio"); 
+const atkFisPropio = document.querySelector("#ataqueFisPropio");
 const atkEspPropio = document.querySelector("#ataqueEspPropio");
 const vidaPropio = document.querySelector("#vidaPropio");
 const defensaEspPropio = document.querySelector("#defensaEspPropio");
 const defensaFisPropio = document.querySelector("#defensaFisPropio");
 const velocidadPropio = document.querySelector("#velocidadPropio");
 
-//Interfaz de usuario
-const input = document.querySelector('#input');
-const btnElegir = document.querySelector('#btn-poke');
-const btnAtkFis  = document.querySelector('#btn-atk-fis');
-const btnAtkEsp  = document.querySelector('#btn-atk-esp');
+// Interfaz de usuario
+const input = document.querySelector("#input");
+const btnElegir = document.querySelector("#btn-poke");
+const btnAtkFis = document.querySelector("#btn-atk-fis");
+const btnAtkEsp = document.querySelector("#btn-atk-esp");
 
-//Método de número random
+// Método de número random
 const getNumRandom = () => {
-    let min = Math.ceil(0);
-    let max = Math.floor(1001);
-    return Math.floor(Math.random() * (max - min) + min);
-}
+  let min = Math.ceil(0);
+  let max = Math.floor(1001);
+  return Math.floor(Math.random() * (max - min) + min);
+};
 
 const obtenerPokePropio = () => {
-    const num = input.value;
+  const num = input.value;
 
-    axios.get(`https://pokeapi.co/api/v2/pokemon/${num}`)
-        .then((res) => {
-            console.log(res.data);
-            return res.data;
-        })
-        .then((res) => {
-            imgPropio.src = res.sprites.back_default;
-            nombrePropio.innerHTML = res.name;
-            tipo1Propio.innerHTML = res.types[0].type.name;
-            tipo2Propio.innerHTML = res.types[1] ? res.types[1].type.name : '';
-            vidaPropio.innerHTML = res.stats[0].base_stat;
-            atkFisPropio.innerHTML = res.stats[1].base_stat;
-            defensaFisPropio.innerHTML = res.stats[2].base_stat;  // Corrected typo here
-            atkEspPropio.innerHTML = res.stats[3].base_stat;
-            defensaEspPropio.innerHTML = res.stats[4].base_stat;
-            velocidadPropio.innerHTML = res.stats[5].base_stat;
-        })
-        .catch(error => console.error("Error fetching Pokémon data: ", error));
+  axios
+    .get(`https://pokeapi.co/api/v2/pokemon/${num}`)
+    .then((res) => {
+      console.log(res.data);
+      return res.data;
+    })
+    .then((res) => {
+      imgPropio.src = res.sprites.back_default;
+      nombrePropio.innerHTML = res.name;
+      tipo1Propio.innerHTML = res.types[0].type.name;
+      tipo2Propio.innerHTML = res.types[1] ? res.types[1].type.name : "";
+      vidaPropio.innerHTML = res.stats[0].base_stat;
+      atkFisPropio.innerHTML = res.stats[1].base_stat;
+      defensaFisPropio.innerHTML = res.stats[2].base_stat; // Corrected typo here
+      atkEspPropio.innerHTML = res.stats[3].base_stat;
+      defensaEspPropio.innerHTML = res.stats[4].base_stat;
+      velocidadPropio.innerHTML = res.stats[5].base_stat;
+    })
+    .catch((error) => console.error("Error fetching Pokémon data: ", error));
 };
 
-
-
-// Generar un Pokémon rival aleatorio 
+// Generar un Pokémon rival aleatorio
 const obtenerPokeRival = () => {
-    const numPokeRival = getNumRandom();
+  const numPokeRival = getNumRandom();
 
-    axios.get(`https://pokeapi.co/api/v2/pokemon/${numPokeRival}`)
-        .then((res) => {
-            console.log(res.data);
-            return res.data;
-        })
-        .then((res) => {
-            imgRival.src = res.sprites.front_default;
-            console.log("Nombre propio:", nombrePropio);
-console.log("Vida propia:", vidaPropio);
-// Y así con otros atributos
+  axios
+    .get(`https://pokeapi.co/api/v2/pokemon/${numPokeRival}`)
+    .then((res) => {
+      console.log(res.data);
+      return res.data;
+    })
+    .then((res) => {
+      imgRival.src = res.sprites.front_default;
+      console.log("Nombre propio:", nombrePropio);
+      console.log("Vida propia:", vidaPropio);
 
-            nombreRival.innerHTML = res.name;
-            tipo1Rival.innerHTML = res.types[0].type.name;
-            tipo2Rival.innerHTML = res.types[1] ? res.types[1].type.name : '';
-            vidaRival.innerHTML = res.stats[0].base_stat;
-            atkFisRival.innerHTML = res.stats[1].base_stat;
-            defensaFisRival.innerHTML = res.stats[2].base_stat;
-            atkEspRival.innerHTML = res.stats[3].base_stat;
-            defensaEspRival.innerHTML = res.stats[4].base_stat;
-            velocidadRival.innerHTML = res.stats[5].base_stat;
-        })
-        .catch(error => console.error("Error fetching Pokémon data: ", error));
+      nombreRival.innerHTML = res.name;
+      tipo1Rival.innerHTML = res.types[0].type.name;
+      tipo2Rival.innerHTML = res.types[1] ? res.types[1].type.name : "";
+      vidaRival.innerHTML = res.stats[0].base_stat;
+      atkFisRival.innerHTML = res.stats[1].base_stat;
+      defensaFisRival.innerHTML = res.stats[2].base_stat;
+      atkEspRival.innerHTML = res.stats[3].base_stat;
+      defensaEspRival.innerHTML = res.stats[4].base_stat;
+      velocidadRival.innerHTML = res.stats[5].base_stat;
+    })
+    .catch((error) => console.error("Error fetching Pokémon data: ", error));
 };
 
-
-// TABLA DE TIPOS 
+// TABLA DE TIPOS
 const calcularMultiplicadorAtaque = (tipoAtaque, tipoDefensaPrimario, tipoDefensaSecundario) => {
 
     const tablaTipos = {
@@ -116,43 +114,117 @@ const calcularMultiplicadorAtaque = (tipoAtaque, tipoDefensaPrimario, tipoDefens
 
     };
 
-    let multiplicadorAtaquePrimario = tablaTipos[tipoAtaque][tipoDefensaPrimario];
+  let multiplicadorAtaquePrimario =
+    tablaTipos[tipoAtaque][tipoDefensaPrimario];
 
-    let multiplicadorAtaqueSecundario = 1;
-    if (tipoDefensaSecundario && tipoDefensaSecundario !== "") {
-        multiplicadorAtaqueSecundario = tablaTipos[tipoAtaque][tipoDefensaSecundario];
-    }
+  let multiplicadorAtaqueSecundario = 1;
+  if (tipoDefensaSecundario && tipoDefensaSecundario !== "") {
+    multiplicadorAtaqueSecundario =
+      tablaTipos[tipoAtaque][tipoDefensaSecundario];
+  }
 
-    const multiplicadorFinal = multiplicadorAtaquePrimario*multiplicadorAtaqueSecundario;
-    return multiplicadorFinal;
-}
+  const multiplicadorFinal =
+    multiplicadorAtaquePrimario * multiplicadorAtaqueSecundario;
+  return multiplicadorFinal;
+};
 
-//MENSAJES PARA VER QUÉ TAN EFECTIVO FUE EL GOLPE
+// MENSAJES PARA VER QUÉ TAN EFECTIVO FUE EL GOLPE
 const efectividad = (multiplicador) => {
+  const mensajes = {
+    0: " NO HIZO DAÑO :( ",
+    0.25: " ¡FUE CASI NADA DE DAÑO! ",
+    0.5: " ¡SE HIZO POCO DAÑO!",
+    1: " EL DAÑO FUE EFECTIVO ",
+    2: " EL DAÑO FUE BASTANTE EFECTIVO :D ",
+    4: " FUE SUPER EFECTIVO ",
+  };
 
-    const mensajes = {
-        0: " NO HIZO DAÑO :( ",
-        0.25: " ¡FUE CASI NADA DE DAÑO! ",
-        0.5: " ¡SE HIZO POCO DAÑO!",
-        1: " EL DAÑO FUE EFECTIVO ",
-        2: " EL DAÑO FUE BASTANTE EFECTIVO :D ",
-        4: " FUE SUPER EFECTIVO "
+  if (mensajes[multiplicador] !== undefined) {
+    return mensajes[multiplicador];
+  } else {
+    return " efecto desconocido :s ";
+  }
+};
+
+// Función para actualizar la UI dinámicamente
+const actualizarUI = (pokemonData, rival = false) => {
+  const prefix = rival ? "Rival" : "Propio";
+
+  // Asignar nombre, nivel y sexo
+  document.getElementById(`nombre${prefix}`).textContent =
+    pokemonData.name.toUpperCase();
+  document.getElementById(`nivel${prefix}`).textContent = `Lv${pokemonData.level}`;
+  document.getElementById(`sexo${prefix}`).textContent =
+    pokemonData.sex || "♂";
+
+  // Tipos y colores
+  const tipo1Element = document.getElementById(`tipo1${prefix}`);
+  const tipo2Element = document.getElementById(`tipo2${prefix}`);
+
+  // Asignar tipos al elemento HTML con sus clases correspondientes
+  tipo1Element.textContent = pokemonData.types[0];
+  tipo1Element.className = `type ${pokemonData.types[0].toLowerCase()}`;
+
+  if (pokemonData.types[1]) {
+    tipo2Element.textContent = pokemonData.types[1];
+    tipo2Element.className = `type ${pokemonData.types[1].toLowerCase()}`;
+  } else {
+    tipo2Element.textContent = "";
+    tipo2Element.className = "type";
+  }
+
+
+  const vidaPorcentaje =
+    (pokemonData.currentHP / pokemonData.totalHP) * 100;
+  const hpBar = document.getElementById(`hp${prefix}-bar`);
+  hpBar.style.width = `${vidaPorcentaje}%`;
+
+  // Cambiar color de barra de vida
+  if (vidaPorcentaje > 50) {
+    hpBar.style.backgroundColor = "green";
+  } else if (vidaPorcentaje > 20) {
+    hpBar.style.backgroundColor = "yellow";
+  } else {
+    hpBar.style.backgroundColor = "red";
+  }
+};
+
+// Función para obtener un Pokémon aleatorio desde la PokeAPI
+const obtenerPokemonAleatorio = async (rival = false) => {
+  try {
+    const randomId = Math.floor(Math.random() * 1008) + 1; // Genera un ID aleatorio entre 1 y 1008
+    const response = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon/${randomId}`
+    );
+    const data = response.data;
+
+    // Extraer información relevante del Pokémon
+    const pokemonData = {
+      name: data.name,
+      level: Math.floor(Math.random() * 100) + 1, // Nivel aleatorio entre 1 y 100
+      sex: Math.random() > 0.5 ? "♂" : "♀", // Sexo aleatorio
+      currentHP: data.stats[0].base_stat,
+      totalHP: data.stats[0].base_stat,
+      types: data.types.map((type) => type.type.name), // Obtener nombres de los tipos
     };
 
-    if (mensajes[multiplicador] !== undefined) {
-        return mensajes[multiplicador];
-    } else {
-        return " efecto desconocido :s ";
-    }
-}
+    // Actualizar la UI con la información del Pokémon
+    actualizarUI(pokemonData, rival);
+  } catch (error) {
+    console.error("Error al obtener el Pokémon:", error);
+  }
+};
 
+// Cargar Pokémon rival al iniciar la página
+window.addEventListener("load", () => {
+  obtenerPokemonAleatorio(true); // Generar el Pokémon rival
+  obtenerPokemonAleatorio(false); // Generar el Pokémon propio
+});
 
 // Cargar Pokémon rival al cargar la página
-window.addEventListener('load', obtenerPokeRival);
+window.addEventListener("load", obtenerPokeRival);
 
 // Asociar el botón para elegir el Pokémon propio
-btnElegir.addEventListener('click', obtenerPokePropio);
+btnElegir.addEventListener("click", obtenerPokePropio);
 
 btnPelear.addEventListener();
-
-
