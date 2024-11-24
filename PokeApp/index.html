@@ -10,34 +10,66 @@
 </head>
 <body>
     
+    <div id="mensajes-combate"></div>
+
+    <div class="pokemon-container">
+        <!-- Información del Pokémon rival -->
+        
     
-    <div class="container">
-    <div class="card">
-        <div class="stats" id="poke-rival">
-            <h3 id="nombreRival"></h3>
-            <p id="tipo1Rival"></p>
-            <p id="tipo2Rival"></p>
-            <p>Vida: <span id="vidaRival"></span></p>
-            <p>Ataque: <span id="ataqueFisRival"></span></p>
-            <p>Ataque Especial: <span id="ataqueEspRival"></span></p>
-            <p>Defensa Especial: <span id="defensaEspRival"></span></p>
-            <p>Defensa Fisica: <span id="defensaFisRival"></span></p>
-            <p>Velocidad: <span id="velocidadRival"></span></p>
+        <!-- Información del Pokémon propio -->
+        <div class="pokemon-card" id="pokemon-propio">
+            <div class="info-header">
+                <span id="nombrePropio">Swadloon</span>
+                <span id="nivelPropio">Lv 30</span>
+                <span id="sexoPropio">♀</span>
+            </div>
+            <div class="hp-bar">
+                <span>HP</span>
+                <div class="hp-bar-container">
+                    <div id="hpPropio-bar"></div>
+                </div>
+            </div>
+            <div class="types">
+                <span class="type bug" id="tipo1Propio">bug</span>
+                <span class="type grass" id="tipo2Propio">grass</span>
+            </div>
+            <div class="pokemon-info">
+                <p>Vida: <span id="vidaPropio"></span></p>
+                <p>Ataque Físico: <span id="ataqueFisPropio"></span></p>
+                <p>Ataque Especial: <span id="ataqueEspPropio"></span></p>
+                <p>Defensa Especial: <span id="defensaEspPropio"></span></p>
+                <p>Defensa Física: <span id="defensaFisPropio"></span></p>
+                <p>Velocidad: <span id="velocidadPropio"></span></p>
+            </div>
         </div>
 
-        <div class="stats" id="poke-propio">
-            <h3 id="nombrePropio"></h3>
-            <p id="tipo1Propio"></p>
-            <p id="tipo2Propio"></p>
-            <p>Vida: <span id="vidaPropio"></span></p>
-            <p>Ataque: <span id="ataqueFisPropio"></span></p>
-            <p>Ataque Especial: <span id="ataqueEspPropio"></span></p>
-            <p>Defensa Especial: <span id="defensaEspPropio"></span></p>
-            <p>Defensa Fisica: <span id="defensaFisPropio"></span></p>
-            <p>Velocidad: <span id="velocidadPropio"></span></p>
+        <div class="pokemon-card" id="pokemon-rival">
+            <div class="info-header">
+                <span id="nombreRival">Magcargo</span>
+                <span id="nivelRival">Lv 30</span>
+                <span id="sexoRival">♂</span>
+            </div>
+            <div class="hp-bar">
+                <span>HP</span>
+                <div class="hp-bar-container">
+                    <div id="hpRival-bar"></div>
+                </div>
+            </div>
+            <div class="types">
+                <span class="type fire" id="tipo1Rival">fire</span>
+                <span class="type rock" id="tipo2Rival">rock</span>
+            </div>
+            <div class="pokemon-info">
+                <p>Vida: <span id="vidaRival"></span></p>
+                <p>Ataque Físico: <span id="ataqueFisRival"></span></p>
+                <p>Ataque Especial: <span id="ataqueEspRival"></span></p>
+                <p>Defensa Especial: <span id="defensaEspRival"></span></p>
+                <p>Defensa Física: <span id="defensaFisRival"></span></p>
+                <p>Velocidad: <span id="velocidadRival"></span></p>
+            </div>
         </div>
     </div>
-</div>
+    
 
         
     <div class="arena">
@@ -50,7 +82,11 @@
         <button id="btn-poke">Elegir poke</button>
         <button id="btn-atk-fis">Ataque Fisico</button>
         <button id="btn-atk-esp">Ataque Especial</button>
+        <button id="btn-combate-auto">Combate Automatico</button>
+
     </div>
+
+    
     <script src="./app.js"></script>
 </body>
 
