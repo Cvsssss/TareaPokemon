@@ -155,4 +155,3 @@ btnPelear.addEventListener();
 
 
 
-
