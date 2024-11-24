@@ -1,3 +1,4 @@
+
 // Atributos del Pokémon rival
 const imgRival = document.querySelector("#pokeRival");
 const nombreRival = document.querySelector("#nombreRival");
@@ -27,18 +28,8 @@ const input = document.querySelector("#input");
 const btnElegir = document.querySelector("#btn-poke");
 const btnAtkFis = document.querySelector("#btn-atk-fis");
 const btnAtkEsp = document.querySelector("#btn-atk-esp");
-const mensajesCombate = document.querySelector("#mensajes-combate")
+const mensajesCombate = document.querySelector("#mensajes-combate");
 
-// Función para aplicar movimiento (sacudida) al Pokémon
-const moverPokemon = (pokemonElement) => {
-    if (!pokemonElement) return;
-    pokemonElement.classList.add("shake");
-  
-    // Remover la clase después de la animación
-    setTimeout(() => {
-      pokemonElement.classList.remove("shake");
-    }, 500); // Duración de la animación
-const btnPeleaAuto = document.querySelector("#btn-combate-auto"
 // Número random para elegir Pokémon rival
 const getNumRandom = () => Math.floor(Math.random() * 1008) + 1;
 
@@ -126,9 +117,9 @@ const obtenerPokeRival = () => {
 
 
 // Cálculo del daño
-const calcularDaño = (ataque, defensa, multiplicador) => {
-  const dañoBase = ataque - defensa * 0.5;
-  return dañoBase > 0 ? dañoBase * multiplicador : 1;
+const calcularDaño = (ataque, defensa) => {
+  const dañoBase = ataque - defensa;
+  return Math.max(dañoBase, 1); // Daño mínimo de 1
 };
 
 // Combate con turnos automáticos
@@ -137,109 +128,104 @@ const combate = (tipoAtaque) => {
   const vidaEnemigo = parseInt(vidaRival.textContent);
 
   if (!vidaJugador || !vidaEnemigo) {
-    agregarMensaje("Asegúrate de que ambos Pokémon están seleccionados.");
-    return;
+      agregarMensaje("Asegúrate de que ambos Pokémon están seleccionados.");
+      return;
   }
 
   const velocidadJugador = parseInt(velocidadPropio.textContent) || 0;
   const velocidadDelRival = parseInt(velocidadRival.textContent) || 0;
 
-  const turnoJugador = () => atacarJugador(tipoAtaque === "auto" ? (Math.random() > 0.5 ? "físico" : "especial") : tipoAtaque); 
-  const turnoRival = () => atacarRival(tipoAtaque === "auto" ? (Math.random() > 0.5 ? "físico" : "especial") : tipoAtaque);
+  const turnoJugador = () => atacarJugador(tipoAtaque);
+  const turnoRival = () => atacarRival(tipoAtaque);
 
   if (velocidadJugador >= velocidadDelRival) {
-    turnoJugador();
-    if (parseInt(vidaRival.textContent) > 0) {
-      setTimeout(turnoRival, 1000);
-    }
+      agregarMensaje("¡Tu Pokémon es más rápido y ataca primero!");
+      turnoJugador();
+      if (parseInt(vidaRival.textContent) > 0) {
+          setTimeout(turnoRival, 1000);
+      }
   } else {
-    turnoRival();
-    if (parseInt(vidaPropio.textContent) > 0) {
-      setTimeout(turnoJugador, 1000);
-    }
-  }
-  if(tipoAtaque === "auto" && parseInt(vidaPropio.textContent) > 0 && parseInt(vidaRival.textContent)>0){
-    setTimeout(() => combate("auto"),2000);
+      agregarMensaje("¡El Pokémon rival es más rápido y ataca primero!");
+      turnoRival();
+      if (parseInt(vidaPropio.textContent) > 0) {
+          setTimeout(turnoJugador, 1000);
+      }
   }
 };
-
-
-// Ataque del jugador
+//Atacar jugador
 const atacarJugador = (tipoAtaque) => {
-    const ataqueJugador =
-      tipoAtaque === "físico"
-        ? parseInt(atkFisPropio.textContent) || 0
-        : parseInt(atkEspPropio.textContent) || 0;
-    const defensaRival =
-      tipoAtaque === "físico"
-        ? parseInt(defensaFisRival.textContent) || 0
-        : parseInt(defensaEspRival.textContent) || 0;
-  
-    const multiplicadorJugador = calcularMultiplicadorAtaque(
-      tipo1Propio.textContent,
-      tipo1Rival.textContent,
-      tipo2Rival.textContent
-    );
-  
-    const dañoJugador = calcularDaño(ataqueJugador, defensaRival, multiplicadorJugador);
-    const vidaEnemigo = Math.max(parseInt(vidaRival.textContent) - dañoJugador, 0);
-    vidaRival.textContent = vidaEnemigo;
-  
-    // Mover al Pokémon rival
-    moverPokemon(imgRival);
-  
-    // Actualizar barra de vida del rival
-    actualizarBarraVida(
-      vidaEnemigo,
-      parseInt(vidaRival.dataset.total),
-      document.getElementById("hpRival-bar")
-    );
-  
-    agregarMensaje(`Tu Pokémon hizo ${dañoJugador.toFixed(2)} de daño.`);
-    if (vidaEnemigo <= 0) {
-      agregarMensaje("¡Has ganado!");
-    }
-  };
-  
+  // Determinar el ataque y la defensa a usar según el tipo de ataque
+  const ataqueJugador = tipoAtaque === "físico"
+      ? parseInt(atkFisPropio.textContent) || 0
+      : parseInt(atkEspPropio.textContent) || 0;
 
-// Ataque del rival
+  const defensaRival = tipoAtaque === "físico"
+      ? parseInt(defensaFisRival.textContent) || 0
+      : parseInt(defensaEspRival.textContent) || 0;
+
+  // Calcular daño base
+  let dañoBase = ataqueJugador - defensaRival * 0.5;
+  dañoBase = Math.max(dañoBase, 1); // Asegurar que el daño no sea menor a 1
+
+  // Aplicar multiplicador de la tabla de tipos
+  const multiplicador = calcularMultiplicadorAtaque(
+      tipo1Propio.textContent.toLowerCase(),
+      tipo1Rival.textContent.toLowerCase(),
+      tipo2Rival.textContent.toLowerCase()
+  );
+  const dañoFinal = Math.floor(dañoBase * multiplicador);
+
+  // Actualizar vida del rival
+  const vidaEnemigo = Math.max(parseInt(vidaRival.textContent) - dañoFinal, 0);
+  vidaRival.textContent = vidaEnemigo;
+  actualizarBarraVida(vidaEnemigo, parseInt(vidaRival.dataset.total), document.getElementById("hpRival-bar"));
+
+  // Mensajes de combate
+  agregarMensaje(`Tu Pokémon usó un ataque ${tipoAtaque}.`);
+  agregarMensaje(`Su daño final fue de ${dañoFinal} por ¡la tabla de tipos!.`);
+  agregarMensaje(`El rival usó su defensa ${tipoAtaque === "físico" ? "física" : "especial"}.`);
+
+  if (vidaEnemigo <= 0) {
+      agregarMensaje("¡Has ganado el combate!");
+  }
+};
+//Atacar Rival
 const atacarRival = (tipoAtaque) => {
-    const ataqueRival =
-      tipoAtaque === "físico"
-        ? parseInt(atkFisRival.textContent) || 0
-        : parseInt(atkEspRival.textContent) || 0;
-    const defensaJugador =
-      tipoAtaque === "físico"
-        ? parseInt(defensaFisPropio.textContent) || 0
-        : parseInt(defensaEspPropio.textContent) || 0;
-  
-    const multiplicadorRival = calcularMultiplicadorAtaque(
-      tipo1Rival.textContent,
-      tipo1Propio.textContent,
-      tipo2Propio.textContent
-    );
-  
-    const dañoRival = calcularDaño(ataqueRival, defensaJugador, multiplicadorRival);
-    const vidaJugador = Math.max(parseInt(vidaPropio.textContent) - dañoRival, 0);
-    vidaPropio.textContent = vidaJugador;
-  
-    // Mover al Pokémon propio
-    moverPokemon(imgPropio);
-  
-    // Actualizar barra de vida del jugador
-    actualizarBarraVida(
-      vidaJugador,
-      parseInt(vidaPropio.dataset.total),
-      document.getElementById("hpPropio-bar")
-    );
-  
-    agregarMensaje(`El Pokémon rival hizo ${dañoRival.toFixed(2)} de daño.`);
-    if (vidaJugador <= 0) {
-      agregarMensaje("¡Has perdido!");
-    }
-  };
-  
+  // Determinar el ataque y la defensa a usar según el tipo de ataque
+  const ataqueRival = tipoAtaque === "físico"
+      ? parseInt(atkFisRival.textContent) || 0
+      : parseInt(atkEspRival.textContent) || 0;
 
+  const defensaJugador = tipoAtaque === "físico"
+      ? parseInt(defensaFisPropio.textContent) || 0
+      : parseInt(defensaEspPropio.textContent) || 0;
+
+  // Calcular daño base
+  let dañoBase = ataqueRival - defensaJugador * 0.5;
+  dañoBase = Math.max(dañoBase, 1); // Asegurar que el daño no sea menor a 1
+
+  // Aplicar multiplicador de la tabla de tipos
+  const multiplicador = calcularMultiplicadorAtaque(
+      tipo1Rival.textContent.toLowerCase(),
+      tipo1Propio.textContent.toLowerCase(),
+      tipo2Propio.textContent.toLowerCase()
+  );
+  const dañoFinal = Math.floor(dañoBase * multiplicador);
+
+  // Actualizar vida del jugador
+  const vidaJugador = Math.max(parseInt(vidaPropio.textContent) - dañoFinal, 0);
+  vidaPropio.textContent = vidaJugador;
+  actualizarBarraVida(vidaJugador, parseInt(vidaPropio.dataset.total), document.getElementById("hpPropio-bar"));
+
+  // Mensajes de combate
+  agregarMensaje(`El Pokémon rival usó un ataque ${tipoAtaque}.`);
+  agregarMensaje(`Su daño final fue de ${dañoFinal} por ¡la tabla de tipos!.`);
+  agregarMensaje(`Tu Pokémon usó su defensa ${tipoAtaque === "físico" ? "física" : "especial"}.`);
+
+  if (vidaJugador <= 0) {
+      agregarMensaje("¡Has perdido el combate!");
+  }
+};
 const calcularMultiplicadorAtaque = (tipoAtaque, tipoDefensa1, tipoDefensa2) => {
     const tablaTipos = {
         "steel": {"normal": 1, "fire": 0.5, "water": 0.5, "grass": 1, "electric": 0.5, "ice": 2, "fighting": 1, "poison": 1, "ground": 1, "flying": 1, "psychic": 1, "bug": 1, "rock": 2, "ghost": 1, "dragon": 1, "dark": 1, "steel": 0.5, "fairy": 2 },
@@ -250,7 +236,7 @@ const calcularMultiplicadorAtaque = (tipoAtaque, tipoDefensa1, tipoDefensa2) => 
         "ghost": {"normal": 0, "fire": 1, "water": 1, "grass": 1, "electric": 1, "ice": 1, "fighting": 1, "poison": 1, "ground": 1, "flying": 1, "psychic": 2, "bug": 1, "rock": 1, "ghost": 2, "dragon": 1, "dark": 0.5, "steel": 1, "fairy": 1 },
         "fire": {"normal": 1, "fire": 0.5, "water": 0.5, "grass": 2, "electric": 1, "ice": 2, "fighting": 1, "poison": 1, "ground": 1, "flying": 1, "psychic": 1, "bug": 2, "rock": 0.5, "ghost": 1, "dragon": 0.5, "dark": 1, "steel": 2, "fairy": 1 },
         "fairy": {"normal": 1, "fire": 0.5, "water": 1, "grass": 1, "electric": 1, "ice": 1, "fighting": 2, "poison": 0.5, "ground": 1, "flying": 1, "psychic": 1, "bug": 1, "rock": 1, "ghost": 1, "dragon": 2, "dark": 2, "steel": 0.5, "fairy": 1 },
-        "ice": {"normal": 1, "fire": 0.5, "water": 0.5, "grass": 2, "electric": 1, "ice": 0.5, "fighting": 2, "poison": 0.5, "ground": 2, "flying": 0.5, "psychic": 0.5, "bug": 0.5, "rock": 1, "ghost": 1, "dragon": 2, "dark": 1, "steel": 0.5, "fairy": 1 },
+        "ice":{"normal": 1, "fire": 0.5, "water": 0.5, "grass": 2, "electric": 1, "ice": 0.5, "fighting": 2, "poison": 0.5, "ground": 2, "flying": 0.5, "psychic": 0.5, "bug": 0.5, "rock": 1, "ghost": 1, "dragon": 2, "dark": 1, "steel": 0.5, "fairy": 1 },
         "fighting": {"normal": 2, "fire": 1, "water": 1, "grass": 1, "electric": 1, "ice": 2, "fighting": 1, "poison": 1, "ground": 1, "flying": 1, "psychic": 1, "bug": 1, "rock": 2, "ghost": 0, "dragon": 1, "dark": 1, "steel": 2, "fairy": 0.5 },
         "normal": {"normal": 1, "fire": 1, "water": 1, "grass": 1, "electric": 1, "ice": 1, "fighting": 1, "poison": 1, "ground": 1, "flying": 1, "psychic": 1, "bug": 1, "rock": 0.5, "ghost": 0, "dragon": 1, "dark": 1, "steel": 0.5, "fairy": 1 },
         "grass": {"normal": 1, "fire": 0.5, "water": 2, "grass": 0.5, "electric": 1, "ice": 1, "fighting": 1, "poison": 0.5, "ground": 2, "flying": 0.5, "psychic": 1, "bug": 0.5, "rock": 2, "ghost": 1, "dragon": 0.5, "dark": 1, "steel": 0.5, "fairy": 1 },
@@ -265,7 +251,7 @@ const calcularMultiplicadorAtaque = (tipoAtaque, tipoDefensa1, tipoDefensa2) => 
 
   const multiplicador1 = tablaTipos[tipoAtaque]?.[tipoDefensa1] || 1;
   const multiplicador2 = tablaTipos[tipoAtaque]?.[tipoDefensa2] || 1;
-
+    const multiplicadorTotal = multiplicador1 * multiplicador2;
   return multiplicador1 * multiplicador2;
 };
 
@@ -282,6 +268,9 @@ const actualizarBarraVida = (vidaActual, vidaTotal, barra) => {
         barra.style.backgroundColor = "red";
     }
 };
+
+
+
 
 
 btnElegir.addEventListener("click", obtenerPokePropio);
