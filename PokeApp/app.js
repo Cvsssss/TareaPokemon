@@ -162,16 +162,26 @@ const atacarJugador = (tipoAtaque) => {
       ? parseInt(defensaFisRival.textContent) || 0
       : parseInt(defensaEspRival.textContent) || 0;
 
-  // Calcular el daño
-  const dañoJugador = calcularDaño(ataqueJugador, defensaRival);
-  const vidaEnemigo = Math.max(parseInt(vidaRival.textContent) - dañoJugador, 0);
+  // Calcular daño base
+  let dañoBase = ataqueJugador - defensaRival * 0.5;
+  dañoBase = Math.max(dañoBase, 1); // Asegurar que el daño no sea menor a 1
+
+  // Aplicar multiplicador de la tabla de tipos
+  const multiplicador = calcularMultiplicadorAtaque(
+      tipo1Propio.textContent.toLowerCase(),
+      tipo1Rival.textContent.toLowerCase(),
+      tipo2Rival.textContent.toLowerCase()
+  );
+  const dañoFinal = Math.floor(dañoBase * multiplicador);
 
   // Actualizar vida del rival
+  const vidaEnemigo = Math.max(parseInt(vidaRival.textContent) - dañoFinal, 0);
   vidaRival.textContent = vidaEnemigo;
   actualizarBarraVida(vidaEnemigo, parseInt(vidaRival.dataset.total), document.getElementById("hpRival-bar"));
 
   // Mensajes de combate
-  agregarMensaje(`Tu Pokémon usó un ataque ${tipoAtaque} causando ${dañoJugador} de daño.`);
+  agregarMensaje(`Tu Pokémon usó un ataque ${tipoAtaque}.`);
+  agregarMensaje(`Su daño final fue de ${dañoFinal} por ¡la tabla de tipos!.`);
   agregarMensaje(`El rival usó su defensa ${tipoAtaque === "físico" ? "física" : "especial"}.`);
 
   if (vidaEnemigo <= 0) {
@@ -189,23 +199,32 @@ const atacarRival = (tipoAtaque) => {
       ? parseInt(defensaFisPropio.textContent) || 0
       : parseInt(defensaEspPropio.textContent) || 0;
 
-  // Calcular el daño
-  const dañoRival = calcularDaño(ataqueRival, defensaJugador);
-  const vidaJugador = Math.max(parseInt(vidaPropio.textContent) - dañoRival, 0);
+  // Calcular daño base
+  let dañoBase = ataqueRival - defensaJugador * 0.5;
+  dañoBase = Math.max(dañoBase, 1); // Asegurar que el daño no sea menor a 1
+
+  // Aplicar multiplicador de la tabla de tipos
+  const multiplicador = calcularMultiplicadorAtaque(
+      tipo1Rival.textContent.toLowerCase(),
+      tipo1Propio.textContent.toLowerCase(),
+      tipo2Propio.textContent.toLowerCase()
+  );
+  const dañoFinal = Math.floor(dañoBase * multiplicador);
 
   // Actualizar vida del jugador
+  const vidaJugador = Math.max(parseInt(vidaPropio.textContent) - dañoFinal, 0);
   vidaPropio.textContent = vidaJugador;
   actualizarBarraVida(vidaJugador, parseInt(vidaPropio.dataset.total), document.getElementById("hpPropio-bar"));
 
   // Mensajes de combate
-  agregarMensaje(`El Pokémon rival usó un ataque ${tipoAtaque} causando ${dañoRival} de daño.`);
+  agregarMensaje(`El Pokémon rival usó un ataque ${tipoAtaque}.`);
+  agregarMensaje(`Su daño final fue de ${dañoFinal} por ¡la tabla de tipos!.`);
   agregarMensaje(`Tu Pokémon usó su defensa ${tipoAtaque === "físico" ? "física" : "especial"}.`);
 
   if (vidaJugador <= 0) {
       agregarMensaje("¡Has perdido el combate!");
   }
 };
-
 const calcularMultiplicadorAtaque = (tipoAtaque, tipoDefensa1, tipoDefensa2) => {
     const tablaTipos = {
         "steel": {"normal": 1, "fire": 0.5, "water": 0.5, "grass": 1, "electric": 0.5, "ice": 2, "fighting": 1, "poison": 1, "ground": 1, "flying": 1, "psychic": 1, "bug": 1, "rock": 2, "ghost": 1, "dragon": 1, "dark": 1, "steel": 0.5, "fairy": 2 },
@@ -231,16 +250,7 @@ const calcularMultiplicadorAtaque = (tipoAtaque, tipoDefensa1, tipoDefensa2) => 
 
   const multiplicador1 = tablaTipos[tipoAtaque]?.[tipoDefensa1] || 1;
   const multiplicador2 = tablaTipos[tipoAtaque]?.[tipoDefensa2] || 1;
-    // Mensajes explicativos
-    agregarMensaje(`Ataque tipo: ${tipoAtaque}`);
-    agregarMensaje(`Defensa tipo 1: ${tipoDefensa1}, multiplicador: ${multiplicador1}`);
-    if (tipoDefensa2) {
-        agregarMensaje(`Defensa tipo 2: ${tipoDefensa2}, multiplicador: ${multiplicador2}`);
-    }
-
     const multiplicadorTotal = multiplicador1 * multiplicador2;
-    agregarMensaje(`Multiplicador total: ${multiplicadorTotal.toFixed(2)}`);
-
   return multiplicador1 * multiplicador2;
 };
 
