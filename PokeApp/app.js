@@ -199,7 +199,7 @@ const atacarJugador = (tipoAtaque) => {
   );
   const dañoFinal = Math.floor(dañoBase * multiplicador);
 
-  // Actualizar vida del rival
+  // Actualizar vida del rival con las barras
   const vidaEnemigo = Math.max(parseInt(vidaRival.textContent) - dañoFinal, 0);
   vidaRival.textContent = vidaEnemigo;
   actualizarBarraVida(vidaEnemigo, parseInt(vidaRival.dataset.total), document.getElementById("hpRival-bar"));
