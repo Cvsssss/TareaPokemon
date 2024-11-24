@@ -1,4 +1,3 @@
-
 // Atributos del Pokémon rival
 const imgRival = document.querySelector("#pokeRival");
 const nombreRival = document.querySelector("#nombreRival");
@@ -28,6 +27,7 @@ const input = document.querySelector("#input");
 const btnElegir = document.querySelector("#btn-poke");
 const btnAtkFis = document.querySelector("#btn-atk-fis");
 const btnAtkEsp = document.querySelector("#btn-atk-esp");
+const btnPeleaAuto = document.querySelector( "#btn-combate-auto")
 const mensajesCombate = document.querySelector("#mensajes-combate");
 
 // Número random para elegir Pokémon rival
@@ -124,34 +124,58 @@ const calcularDaño = (ataque, defensa) => {
 
 // Combate con turnos automáticos
 const combate = (tipoAtaque) => {
-  const vidaJugador = parseInt(vidaPropio.textContent);
-  const vidaEnemigo = parseInt(vidaRival.textContent);
-
-  if (!vidaJugador || !vidaEnemigo) {
+    const vidaJugador = parseInt(vidaPropio.textContent);
+    const vidaEnemigo = parseInt(vidaRival.textContent);
+  
+    if (!vidaJugador || !vidaEnemigo) {
       agregarMensaje("Asegúrate de que ambos Pokémon están seleccionados.");
       return;
-  }
-
-  const velocidadJugador = parseInt(velocidadPropio.textContent) || 0;
-  const velocidadDelRival = parseInt(velocidadRival.textContent) || 0;
-
-  const turnoJugador = () => atacarJugador(tipoAtaque);
-  const turnoRival = () => atacarRival(tipoAtaque);
-
-  if (velocidadJugador >= velocidadDelRival) {
+    }
+  
+    const velocidadJugador = parseInt(velocidadPropio.textContent) || 0;
+    const velocidadDelRival = parseInt(velocidadRival.textContent) || 0;
+  
+    // Lógica para el turno del jugador y del rival
+    const turnoJugador = () => {
+      const ataque = tipoAtaque === "auto" ? (Math.random() > 0.5 ? "físico" : "especial") : tipoAtaque;
+      atacarJugador(ataque);
+    };
+  
+    const turnoRival = () => {
+      const ataque = tipoAtaque === "auto" ? (Math.random() > 0.5 ? "físico" : "especial") : tipoAtaque;
+      atacarRival(ataque);
+    };
+  
+    if (velocidadJugador >= velocidadDelRival) {
       agregarMensaje("¡Tu Pokémon es más rápido y ataca primero!");
       turnoJugador();
+  
       if (parseInt(vidaRival.textContent) > 0) {
-          setTimeout(turnoRival, 1000);
+        setTimeout(turnoRival, 1000);
       }
-  } else {
+    } else {
       agregarMensaje("¡El Pokémon rival es más rápido y ataca primero!");
       turnoRival();
+  
       if (parseInt(vidaPropio.textContent) > 0) {
-          setTimeout(turnoJugador, 1000);
+        setTimeout(turnoJugador, 1000);
       }
-  }
-};
+    }
+  
+    // Si el modo automático está activado, continuar el combate
+    if (tipoAtaque === "auto") {
+      const vidaRestanteJugador = parseInt(vidaPropio.textContent);
+      const vidaRestanteRival = parseInt(vidaRival.textContent);
+  
+      if (vidaRestanteJugador > 0 && vidaRestanteRival > 0) {
+        setTimeout(() => combate("auto"), 2000); // Continuar automáticamente
+      } else if (vidaRestanteJugador <= 0) {
+        agregarMensaje("¡El rival ha ganado el combate!");
+      } else if (vidaRestanteRival <= 0) {
+        agregarMensaje("¡Has ganado el combate!");
+      }
+    }
+  };
 //Atacar jugador
 const atacarJugador = (tipoAtaque) => {
   // Determinar el ataque y la defensa a usar según el tipo de ataque
@@ -270,13 +294,11 @@ const actualizarBarraVida = (vidaActual, vidaTotal, barra) => {
 };
 
 
-
-
-
 btnElegir.addEventListener("click", obtenerPokePropio);
 btnAtkFis.addEventListener("click", () => combate("físico"));
 btnAtkEsp.addEventListener("click", () => combate("especial"));
-btnPeleaAuto.addEventListener("click", () => combate("auto"));
+btnPeleaAuto.addEventListener("click", () => {
+    agregarMensaje("¡Inicia el combate automático!");
+    combate("auto");
+  });
 window.addEventListener("load", obtenerPokeRival);
-
-
