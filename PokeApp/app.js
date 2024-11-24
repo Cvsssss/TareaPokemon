@@ -203,7 +203,8 @@ const atacarJugador = (tipoAtaque) => {
   const vidaEnemigo = Math.max(parseInt(vidaRival.textContent) - dañoFinal, 0);
   vidaRival.textContent = vidaEnemigo;
   actualizarBarraVida(vidaEnemigo, parseInt(vidaRival.dataset.total), document.getElementById("hpRival-bar"));
-
+  // Mover al Pokémon rival
+  moverPokemon(imgRival);
   // Mensajes de combate
   agregarMensaje(`Tu Pokémon usó un ataque ${tipoAtaque}.`);
   agregarMensaje(`Su daño final fue de ${dañoFinal} por ¡la tabla de tipos!.`);
@@ -240,7 +241,8 @@ const atacarRival = (tipoAtaque) => {
   const vidaJugador = Math.max(parseInt(vidaPropio.textContent) - dañoFinal, 0);
   vidaPropio.textContent = vidaJugador;
   actualizarBarraVida(vidaJugador, parseInt(vidaPropio.dataset.total), document.getElementById("hpPropio-bar"));
-
+  // Mover al Pokémon propio
+    moverPokemon(imgPropio);
   // Mensajes de combate
   agregarMensaje(`El Pokémon rival usó un ataque ${tipoAtaque}.`);
   agregarMensaje(`Su daño final fue de ${dañoFinal} por ¡la tabla de tipos!.`);
@@ -293,6 +295,16 @@ const actualizarBarraVida = (vidaActual, vidaTotal, barra) => {
     }
 };
 
+// Función para aplicar movimiento (sacudida) al Pokémon
+const moverPokemon = (pokemonElement) => {
+    if (!pokemonElement) return;
+    pokemonElement.classList.add("shake");
+
+    // Remover la clase después de la animación
+    setTimeout(() => {
+      pokemonElement.classList.remove("shake");
+    }, 500); // Duración de la animación
+  };
 
 btnElegir.addEventListener("click", obtenerPokePropio);
 btnAtkFis.addEventListener("click", () => combate("físico"));
