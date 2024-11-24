@@ -143,68 +143,95 @@ const efectividad = (multiplicador) => {
 }
 
 const combate = () => {
-    // Obtención de valores actuales de vida
-    let vidaActualRival = parseFloat(vidaRival.textContent);
-    let vidaActualPropio = parseFloat(vidaPropio.textContent);
-
-    // Obtención de nombres y estadísticas
     const nombreRivalTexto = nombreRival.textContent;
     const nombrePropioTexto = nombrePropio.textContent;
-    const ataqueRival = parseInt(atkFisRival.textContent) || 0;
-    const ataquePropio = parseInt(atkFisPropio.textContent) || 0;
+
+    // Obtener los valores de ataque, vida y velocidad de ambos Pokémon
+    let ataqueRival = parseInt(atkFisRival.textContent) || 0;
+    let ataquePropio = parseInt(atkFisPropio.textContent) || 0;
+    let vidaActualRival = parseInt(vidaRival.textContent) || 0;
+    let vidaActualPropio = parseInt(vidaPropio.textContent) || 0;
+    const velocidadRivalValor = parseInt(velocidadRival.textContent) || 0;
+    const velocidadPropioValor = parseInt(velocidadPropio.textContent) || 0;
+
+    // Obtener tipos
     const tipoRival = tipo1Rival.textContent;
     const tipoPropio = tipo1Propio.textContent;
     const tipoRivalSecundario = tipo2Rival.textContent;
     const tipoPropioSecundario = tipo2Propio.textContent;
 
-    // Cálculo de multiplicadores y daño
-    const multiplicadorAtaquePropio = calcularMultiplicadorAtaque(tipoPropio, tipoRival, tipoRivalSecundario);
-    const ataquePropioTotal = ataquePropio * multiplicadorAtaquePropio;
-    const efectividadAtaquePropio = efectividad(multiplicadorAtaquePropio);
-
-    const multiplicadorAtaqueRival = calcularMultiplicadorAtaque(tipoRival, tipoPropio, tipoPropioSecundario);
-    const ataqueRivalTotal = ataqueRival * multiplicadorAtaqueRival;
-    const efectividadAtaqueRival = efectividad(multiplicadorAtaqueRival);
-
-    // Restar daño a las vidas
-    vidaActualRival -= ataquePropioTotal;
-    vidaActualPropio -= ataqueRivalTotal;
-
-    vidaActualRival = Math.max(0, vidaActualRival);
-    vidaActualPropio = Math.max(0, vidaActualPropio);
-
-    // Actualización de la interfaz
-    vidaRival.textContent = vidaActualRival.toFixed(2);
-    vidaPropio.textContent = vidaActualPropio.toFixed(2);
-
-    // Mostrar mensajes del combate
     const mensajesCombate = document.getElementById('mensajes-combate');
     mensajesCombate.innerHTML = ''; // Limpia mensajes anteriores
 
-    const mensajeAtaquePropio = document.createElement('p');
-    mensajeAtaquePropio.textContent = `¡${nombrePropioTexto} ataca! ${efectividadAtaquePropio} e hizo ${ataquePropioTotal.toFixed(2)} puntos de daño al rival.`;
-    mensajesCombate.appendChild(mensajeAtaquePropio);
+    // Función para aplicar daño
+    const aplicarDaño = (atacante, defensor, ataque, multiplicador, vidaActual) => {
+        const daño = ataque * multiplicador;
+        vidaActual -= daño;
+        const efectividadMensaje = efectividad(multiplicador);
+        const mensaje = document.createElement('p');
+        mensaje.textContent = `¡${atacante} ataca! ${efectividadMensaje} e hizo ${daño.toFixed(2)} puntos de daño a ${defensor}.`;
+        mensajesCombate.appendChild(mensaje);
+        return Math.max(vidaActual, 0); // Asegurar que la vida no sea menor a 0
+    };
 
-    const mensajeAtaqueRival = document.createElement('p');
-    mensajeAtaqueRival.textContent = `¡${nombreRivalTexto} contraataca! ${efectividadAtaqueRival} e hizo ${ataqueRivalTotal.toFixed(2)} puntos de daño.`;
-    mensajesCombate.appendChild(mensajeAtaqueRival);
+    // Determinar quién ataca primero
+    if (velocidadPropioValor >= velocidadRivalValor) {
+        // El jugador ataca primero
+        vidaActualRival = aplicarDaño(
+            nombrePropioTexto,
+            nombreRivalTexto,
+            ataquePropio,
+            calcularMultiplicadorAtaque(tipoPropio, tipoRival, tipoRivalSecundario),
+            vidaActualRival
+        );
 
-    // Verificar si hay un ganador
-    if (vidaActualRival <= 0 || vidaActualPropio <= 0) {
-        const mensajeFinal = document.createElement('p');
-        if (vidaActualRival <= 0 && vidaActualPropio <= 0) {
-            mensajeFinal.textContent = "¡Es un empate! Ambos Pokémon han caído.";
-        } else if (vidaActualRival <= 0) {
-            mensajeFinal.textContent = `¡${nombrePropioTexto} ha ganado el combate!`;
-        } else if (vidaActualPropio <= 0) {
-            mensajeFinal.textContent = `¡${nombreRivalTexto} ha ganado el combate!`;
+        if (vidaActualRival > 0) {
+            // Si el rival sigue vivo, contraataca
+            vidaActualPropio = aplicarDaño(
+                nombreRivalTexto,
+                nombrePropioTexto,
+                ataqueRival,
+                calcularMultiplicadorAtaque(tipoRival, tipoPropio, tipoPropioSecundario),
+                vidaActualPropio
+            );
         }
-        mensajesCombate.appendChild(mensajeFinal);
+    } else {
+        // El rival ataca primero
+        vidaActualPropio = aplicarDaño(
+            nombreRivalTexto,
+            nombrePropioTexto,
+            ataqueRival,
+            calcularMultiplicadorAtaque(tipoRival, tipoPropio, tipoPropioSecundario),
+            vidaActualPropio
+        );
 
-        
+        if (vidaActualPropio > 0) {
+            // Si el jugador sigue vivo, contraataca
+            vidaActualRival = aplicarDaño(
+                nombrePropioTexto,
+                nombreRivalTexto,
+                ataquePropio,
+                calcularMultiplicadorAtaque(tipoPropio, tipoRival, tipoRivalSecundario),
+                vidaActualRival
+            );
+        }
+    }
+
+    // Actualizar la vida en la interfaz
+    vidaRival.textContent = vidaActualRival.toFixed(2);
+    vidaPropio.textContent = vidaActualPropio.toFixed(2);
+
+    // Determinar el resultado final
+    if (vidaActualRival <= 0) {
+        const mensajeFinal = document.createElement('p');
+        mensajeFinal.textContent = `¡${nombrePropioTexto} ha ganado el combate!`;
+        mensajesCombate.appendChild(mensajeFinal);
+    } else if (vidaActualPropio <= 0) {
+        const mensajeFinal = document.createElement('p');
+        mensajeFinal.textContent = `¡${nombreRivalTexto} ha ganado el combate!`;
+        mensajesCombate.appendChild(mensajeFinal);
     }
 };
-
 
 // Cargar Pokémon rival al cargar la página
 window.addEventListener('load', obtenerPokeRival);
