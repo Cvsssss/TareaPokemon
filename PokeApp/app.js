@@ -1,5 +1,4 @@
 
-
 //Atributos poke rival
 const imgRival = document.querySelector("#pokeRival");
 const nombreRival = document.querySelector("#nombreRival");
@@ -97,7 +96,5 @@ window.addEventListener('load', obtenerPokeRival);
 btnElegir.addEventListener('click', obtenerPokePropio);
 
 btnPelear.addEventListener();
-
-
 
 
