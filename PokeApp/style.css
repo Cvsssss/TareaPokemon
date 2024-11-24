@@ -25,21 +25,21 @@ body{
 #pokePropio{
   
     position: fixed;
-    top: 200px;
-    left: 430px;
+    top: 539px;
+    left: 122px;
 }
 #pokeRival{
   
     position: fixed;
-    top: 423px;
-    left: 331px;
+    top: 453px;
+    left: 311px;
 }
 #poke-rival{
-    height: 10%;
+    height: 15%;
     width: 100%;
 }
 #poke-propio{
-    height: 20%;
+    height: 25%;
     width: 100%;
 }
 #container {
