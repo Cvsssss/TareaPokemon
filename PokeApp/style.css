@@ -290,3 +290,16 @@ img {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); 
     text-transform: uppercase; 
 }
+/* Animación de sacudida */
+.shake {
+    animation: shake 0.5s ease;
+  }
+  
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+  }
+  
