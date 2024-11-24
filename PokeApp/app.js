@@ -28,7 +28,7 @@ const btnElegir = document.querySelector("#btn-poke");
 const btnAtkFis = document.querySelector("#btn-atk-fis");
 const btnAtkEsp = document.querySelector("#btn-atk-esp");
 const mensajesCombate = document.querySelector("#mensajes-combate");
-
+const btnPeleaAuto = document.querySelector("#btn-combate-auto")
 // Número random para elegir Pokémon rival
 const getNumRandom = () => Math.floor(Math.random() * 1008) + 1;
 
@@ -134,8 +134,8 @@ const combate = (tipoAtaque) => {
   const velocidadJugador = parseInt(velocidadPropio.textContent) || 0;
   const velocidadDelRival = parseInt(velocidadRival.textContent) || 0;
 
-  const turnoJugador = () => atacarJugador(tipoAtaque);
-  const turnoRival = () => atacarRival(tipoAtaque);
+  const turnoJugador = () => atacarJugador(tipoAtaque === "auto" ? (Math.random() > 0.5 ? "físico" : "especial") : tipoAtaque); 
+  const turnoRival = () => atacarRival(tipoAtaque === "auto" ? (Math.random() > 0.5 ? "físico" : "especial") : tipoAtaque);
 
   if (velocidadJugador >= velocidadDelRival) {
     turnoJugador();
@@ -147,6 +147,9 @@ const combate = (tipoAtaque) => {
     if (parseInt(vidaPropio.textContent) > 0) {
       setTimeout(turnoJugador, 1000);
     }
+  }
+  if(tipoAtaque === "auto" && parseInt(vidaPropio.textContent) > 0 && parseInt(vidaRival.textContent)>0){
+    setTimeout(() => combate("auto"),2000);
   }
 };
 
@@ -258,4 +261,7 @@ const actualizarBarraVida = (vidaActual, vidaTotal, barra) => {
 btnElegir.addEventListener("click", obtenerPokePropio);
 btnAtkFis.addEventListener("click", () => combate("físico"));
 btnAtkEsp.addEventListener("click", () => combate("especial"));
+btnPeleaAuto.addEventListener("click", () => combate("auto"));
 window.addEventListener("load", obtenerPokeRival);
+
+
