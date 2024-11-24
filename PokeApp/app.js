@@ -89,6 +89,8 @@ console.log("Vida propia:", vidaPropio);
         })
         .catch(error => console.error("Error fetching Pokémon data: ", error));
 };
+
+
 // TABLA DE TIPOS 
 const calcularMultiplicadorAtaque = (tipoAtaque, tipoDefensaPrimario, tipoDefensaSecundario) => {
 
@@ -152,6 +154,5 @@ window.addEventListener('load', obtenerPokeRival);
 btnElegir.addEventListener('click', obtenerPokePropio);
 
 btnPelear.addEventListener();
-
 
 
