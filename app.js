@@ -314,4 +314,6 @@ btnPeleaAuto.addEventListener("click", () => {
     agregarMensaje("¡Inicia el combate automático!");
     combate("auto");
   });
+
 window.addEventListener("load", obtenerPokeRival);
+

@@ -4,4 +4,5 @@
 Cuevas Quintana Amir\\
 Melendez Gomez Anuar\\
 Nava Benitez David Emilio\\
-Sandoval Hernandez Darinka
+Sandoval Hernandez Darinka\\
+Soto Yañez Leonardo Tadeo
